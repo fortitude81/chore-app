@@ -8,14 +8,15 @@
     <h2>Chore App</h2>
 
     <form ng-submit="createTask()">
-        <input class="form-control todos__create-input" placeholder="What needs to get done?" ng-model="createTaskInput" />
-        <button class="btn btn-success todos__create-button">Create Chore</button>
+        <input class="form-control todos__create-input" placeholder="What do I need to do?" ng-model="createTaskInput" />
+        <button class="btn btn-success todos__create-button">Add Chore</button>
     </form>
 
     <table class="table table-striped">
         <tr>
             <th>Completed?</th>
             <th>Chore</th>
+            <th>Assign</th>
             <th>Actions</th>
         </tr>
         <tr ng-repeat="todo in todos">
@@ -37,6 +38,11 @@
                         ng-value="todo.task"
                         ng-model="todo.updatedTask" />
                 </form>
+            </td>
+            <td>
+                <span>
+                    {{todo.assignUserID | uppercase}}
+                </span>
             </td>
             <td>
                 <button ng-if="!todo.isEditing"
@@ -78,7 +84,7 @@
 
             </div>
             <div class="modal-footer">
-                <button class="btn btn-primary" ng-click="onAssignClick()">Save changes</button>
+                <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true" ng-click="onAssignClick()">Save changes</button>
             </div>
         </div>
     </div>
