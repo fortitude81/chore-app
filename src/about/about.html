@@ -1,0 +1,11 @@
+<div class="container">
+    <a class="nav-link">About</a>
+    <a ui-sref="register" class="nav-link" ng-if="!User.name">Register</a>
+    <a ui-sref="login" class="nav-link" ng-if="!User.name">Login</a>
+    <a ng-click="logout()" class="nav-link" ng-if="User.name">Logout</a>
+    <span class="nav-link" ng-if="User.name">{{User.name | uppercase}}</span>
+    <a ui-sref="todos" class="nav-link">Home</a>
+    <h2>About Page</h2>
+
+    <p>This chore app assigns tasks to other users.</p>
+</div>

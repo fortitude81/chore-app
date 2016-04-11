@@ -1,0 +1,85 @@
+<div class="container">
+    <a ui-sref="about" class="nav-link">About</a>
+    <a ui-sref="register" class="nav-link" ng-if="!User.name">Register</a>
+    <a ui-sref="login" class="nav-link" ng-if="!User.name">Login</a>
+    <a ng-click="logout()" class="nav-link" ng-if="User.name">Logout</a>
+    <span class="nav-link" ng-if="User.name">{{User.name | uppercase}}</span>
+    <a class="nav-link">Home</a>
+    <h2>Chore App</h2>
+
+    <form ng-submit="createTask()">
+        <input class="form-control todos__create-input" placeholder="What needs to get done?" ng-model="createTaskInput" />
+        <button class="btn btn-success todos__create-button">Create Chore</button>
+    </form>
+
+    <table class="table table-striped">
+        <tr>
+            <th>Completed?</th>
+            <th>Chore</th>
+            <th>Actions</th>
+        </tr>
+        <tr ng-repeat="todo in todos">
+            <td>
+                <input type="checkbox"
+                    ng-checked="todo.isCompleted"
+                    ng-click="onCompletedClick(todo)" />
+            </td>
+            <td>
+                <span ng-if="!todo.isEditing"
+                    class="todos__task"
+                    ng-class="{'todos__task--completed': todo.isCompleted}">
+                    {{todo.task}}
+                </span>
+
+                <form ng-submit="updateTask(todo)">
+                    <input ng-if="todo.isEditing"
+                        class="form-control todos__update-input"
+                        ng-value="todo.task"
+                        ng-model="todo.updatedTask" />
+                </form>
+            </td>
+            <td>
+                <button ng-if="!todo.isEditing"
+                    class="btn btn-info"
+                    ng-click="onEditClick(todo)">
+                    Edit
+                </button>
+                <button ng-if="!todo.isEditing"
+                    class="btn btn-danger"
+                    ng-click="deleteTask(todo)">
+                    Delete
+                </button>
+
+                <button ng-if="todo.isEditing"
+                    class="btn btn-primary"
+                    ng-click="updateTask(todo)">
+                    Save
+                </button>
+                <button ng-if="todo.isEditing"
+                    class="btn btn-default"
+                    ng-click="onCancelClick(todo)">
+                    Cancel
+                </button>
+                <a href="#assignModel" role="button" class="btn btn-warning" data-toggle="modal" ng-click="selectTodo(todo)" ng-if="(User.role | uppercase) == 'ADMIN'">Assign</a>
+            </td>
+        </tr>
+    </table>
+    <div id="assignModel" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3>Select User</h3>
+            </div>
+            <div class="modal-body">
+
+                <select class="selectpicker" data-container="body" ng-model="selectedUser">
+                    <option ng-repeat="user in users" value="{{user.userName}}">{{user.userName | uppercase}}</option>
+                </select>
+
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" ng-click="onAssignClick()">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
