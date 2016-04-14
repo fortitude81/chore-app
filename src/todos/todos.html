@@ -5,7 +5,7 @@
     <a ng-click="logout()" class="nav-link" ng-if="User.name">Logout</a>
     <span class="nav-link" ng-if="User.name">{{User.name | uppercase}}</span>
     <a class="nav-link">Home</a>
-    <h2>Chore App</h2>
+    <h2>Chores</h2>
 
     <form ng-submit="createTask()">
         <input class="form-control todos__create-input" placeholder="What needs to get done?" ng-model="createTaskInput" />
