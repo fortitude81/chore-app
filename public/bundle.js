@@ -48195,6 +48195,15 @@
 	        // todo.isEditing = false;
 	    }
 
+	    function assignTask($scope, todo) {
+	        $http.put('/todos/assign/' + todo._id, { assignUserID: todo.assignUserID }).success(function (response) {
+	            getTasks($scope);
+	        });
+
+	        // todo.task = todo.updatedTask;
+	        // todo.isEditing = false;
+	    }
+
 	    function deleteTask($scope, todoToDelete) {
 	        $http.delete('/todos/' + todoToDelete._id).success(function (response) {
 	            getTasks($scope);
@@ -48221,6 +48230,7 @@
 	        getTasks: getTasks,
 	        createTask: createTask,
 	        updateTask: updateTask,
+	        assignTask: assignTask,
 	        deleteTask: deleteTask,
 	        watchCreateTaskInput: watchCreateTaskInput
 	    };
@@ -64377,17 +64387,19 @@
 
 	    $scope.onAssignClick = function (todo) {
 	        $scope.selectedTodo.assignUserID = $scope.selectedUser;
-	        $scope.updateTask($scope.selectedTodo);
+	        $scope.assignTask($scope.selectedTodo);
 	    };
 
 	    var createTask = todoFactory.createTask;
 	    var updateTask = todoFactory.updateTask;
+	    var assignTask = todoFactory.assignTask;
 	    var deleteTask = todoFactory.deleteTask;
 	    var watchCreateTaskInput = todoFactory.watchCreateTaskInput;
 
 
 	    $scope.createTask = _lodash2.default.partial(createTask, $scope, params);
 	    $scope.updateTask = _lodash2.default.partial(updateTask, $scope);
+	    $scope.assignTask = _lodash2.default.partial(assignTask, $scope);
 	    $scope.deleteTask = _lodash2.default.partial(deleteTask, $scope);
 	    $scope.$watch('createTaskInput', _lodash2.default.partial(watchCreateTaskInput, params, $scope));
 	};
@@ -64484,7 +64496,7 @@
 /* 39 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"container\">\n    <a ui-sref=\"about\" class=\"nav-link\">About</a>\n    <a ui-sref=\"register\" class=\"nav-link\">Register</a>\n    <a class=\"nav-link\">Login</a>\n    <a ui-sref=\"todos\" class=\"nav-link\">Home</a>\n    <h2>Chore App</h2>\n\n    <form ng-submit=\"login()\">\n        <input class=\"form-control todos__create-input\" type=\"text\" placeholder=\"User Name\" ng-model=\"user.name\" />\n        <input class=\"form-control todos__create-input\" type=\"password\" placeholder=\"Password\" ng-model=\"user.password\" />\n        <button class=\"btn btn-success todos__create-button\" type=\"submit\">Login</button>\n    </form>\n</div>\n"
+	module.exports = "<!-- <html> -->\n<div class=\"gradient\">\n\n    <div class=\"container\">\n        <a ui-sref=\"about\" class=\"nav-link\">About</a>\n        <a ui-sref=\"register\" class=\"nav-link\">Register</a>\n        <a class=\"nav-link\">Login</a>\n        <a ui-sref=\"todos\" class=\"nav-link\">Home</a>\n        <h1 class=\"navbar-brand\">Chores - Get It Done!</h1>\n    </div>\n\n    <div class=\"loginForm\">\n        <form ng-submit=\"login()\">\n            <input class=\"form-control todos__create-input\" type=\"text\" placeholder=\"User Name\" ng-model=\"user.name\" />\n            <input class=\"form-control todos__create-input\" type=\"password\" placeholder=\"Password\" ng-model=\"user.password\" />\n            <button class=\"btn btn-success todos__create-button\" type=\"submit\">Login</button>\n        </form>\n    </div>\n\n    <div class=\"row\">\n      <div class=\"span4\"><img class=\"center-block\"\n        \n          <img src=\"https://cdn0.iconfinder.com/data/icons/iconshock-windows7-icons/256/task_completed.png\" class=\"img-rounded\">\n       \n      </div>\n      \n    </div>\n\n\n   <footer class=\"footer\">\n      <!-- <div class=\"container\"> -->\n        <p class=\"text-muted\">This App brought to you by <a href=\"http://www.justinbennett.co\">Justin Bennett</a>, 2016.</p>\n        </p>\n     <!--  </div> -->\n    </footer>\n\n\n</div>\n\n<!-- </html> -->\n\n\n\n   \n"
 
 /***/ },
 /* 40 */
@@ -64496,7 +64508,7 @@
 /* 41 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"container\">\n    <a ui-sref=\"about\" class=\"nav-link\">About</a>\n    <a ui-sref=\"register\" class=\"nav-link\" ng-if=\"!User.name\">Register</a>\n    <a ui-sref=\"login\" class=\"nav-link\" ng-if=\"!User.name\">Login</a>\n    <a ng-click=\"logout()\" class=\"nav-link\" ng-if=\"User.name\">Logout</a>\n    <span class=\"nav-link\" ng-if=\"User.name\">{{User.name | uppercase}}</span>\n    <a class=\"nav-link\">Home</a>\n    <h2>Chore App</h2>\n\n    <form ng-submit=\"createTask()\">\n        <input class=\"form-control todos__create-input\" placeholder=\"What needs to get done?\" ng-model=\"createTaskInput\" />\n        <button class=\"btn btn-success todos__create-button\">Create Chore</button>\n    </form>\n\n    <table class=\"table table-striped\">\n        <tr>\n            <th>Completed?</th>\n            <th>Chore</th>\n            <th>Actions</th>\n        </tr>\n        <tr ng-repeat=\"todo in todos\">\n            <td>\n                <input type=\"checkbox\"\n                    ng-checked=\"todo.isCompleted\"\n                    ng-click=\"onCompletedClick(todo)\" />\n            </td>\n            <td>\n                <span ng-if=\"!todo.isEditing\"\n                    class=\"todos__task\"\n                    ng-class=\"{'todos__task--completed': todo.isCompleted}\">\n                    {{todo.task}}\n                </span>\n\n                <form ng-submit=\"updateTask(todo)\">\n                    <input ng-if=\"todo.isEditing\"\n                        class=\"form-control todos__update-input\"\n                        ng-value=\"todo.task\"\n                        ng-model=\"todo.updatedTask\" />\n                </form>\n            </td>\n            <td>\n                <button ng-if=\"!todo.isEditing\"\n                    class=\"btn btn-info\"\n                    ng-click=\"onEditClick(todo)\">\n                    Edit\n                </button>\n                <button ng-if=\"!todo.isEditing\"\n                    class=\"btn btn-danger\"\n                    ng-click=\"deleteTask(todo)\">\n                    Delete\n                </button>\n\n                <button ng-if=\"todo.isEditing\"\n                    class=\"btn btn-primary\"\n                    ng-click=\"updateTask(todo)\">\n                    Save\n                </button>\n                <button ng-if=\"todo.isEditing\"\n                    class=\"btn btn-default\"\n                    ng-click=\"onCancelClick(todo)\">\n                    Cancel\n                </button>\n                <a href=\"#assignModel\" role=\"button\" class=\"btn btn-warning\" data-toggle=\"modal\" ng-click=\"selectTodo(todo)\" ng-if=\"(User.role | uppercase) == 'ADMIN'\">Assign</a>\n            </td>\n        </tr>\n    </table>\n    <div id=\"assignModel\" class=\"modal fade\" tabindex=\"-1\" role=\"dialog\">\n        <div class=\"modal-content\">\n            <div class=\"modal-header\">\n                <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-hidden=\"true\">×</button>\n                <h3>Select User</h3>\n            </div>\n            <div class=\"modal-body\">\n\n                <select class=\"selectpicker\" data-container=\"body\" ng-model=\"selectedUser\">\n                    <option ng-repeat=\"user in users\" value=\"{{user.userName}}\">{{user.userName | uppercase}}</option>\n                </select>\n\n            </div>\n            <div class=\"modal-footer\">\n                <button class=\"btn btn-primary\" ng-click=\"onAssignClick()\">Save changes</button>\n            </div>\n        </div>\n    </div>\n</div>\n"
+	module.exports = "<div class=\"container\">\n    <a ui-sref=\"about\" class=\"nav-link\">About</a>\n    <a ui-sref=\"register\" class=\"nav-link\" ng-if=\"!User.name\">Register</a>\n    <a ui-sref=\"login\" class=\"nav-link\" ng-if=\"!User.name\">Login</a>\n    <a ng-click=\"logout()\" class=\"nav-link\" ng-if=\"User.name\">Logout</a>\n    <span class=\"nav-link\" ng-if=\"User.name\">{{User.name | uppercase}}</span>\n    <a class=\"nav-link\">Home</a>\n    <h2>Chores</h2>\n\n    <form ng-submit=\"createTask()\">\n        <input class=\"form-control todos__create-input\" placeholder=\"What needs to get done?\" ng-model=\"createTaskInput\" />\n        <button class=\"btn btn-success todos__create-button\">Add Chore</button>\n    </form>\n\n    <table class=\"table table-striped\">\n        <tr>\n            <th>Completed?</th>\n            <th>Chore</th>\n            <th>Assign</th>\n            <th>Actions</th>\n        </tr>\n        <tr ng-repeat=\"todo in todos\">\n            <td>\n                <input type=\"checkbox\"\n                    ng-checked=\"todo.isCompleted\"\n                    ng-click=\"onCompletedClick(todo)\" />\n            </td>\n            <td>\n                <span ng-if=\"!todo.isEditing\"\n                    class=\"todos__task\"\n                    ng-class=\"{'todos__task--completed': todo.isCompleted}\">\n                    {{todo.task}}\n                </span>\n\n                <form ng-submit=\"updateTask(todo)\">\n                    <input ng-if=\"todo.isEditing\"\n                        class=\"form-control todos__update-input\"\n                        ng-value=\"todo.task\"\n                        ng-model=\"todo.updatedTask\" />\n                </form>\n            </td>\n            <td>\n                <span>\n                    {{todo.assignUserID | uppercase}}\n                </span>\n            </td>\n            <td>\n                <button ng-if=\"!todo.isEditing\"\n                    class=\"btn btn-info\"\n                    ng-click=\"onEditClick(todo)\">\n                    Edit\n                </button>\n                <button ng-if=\"!todo.isEditing\"\n                    class=\"btn btn-danger\"\n                    ng-click=\"deleteTask(todo)\">\n                    Delete\n                </button>\n\n                <button ng-if=\"todo.isEditing\"\n                    class=\"btn btn-primary\"\n                    ng-click=\"updateTask(todo)\">\n                    Save\n                </button>\n                <button ng-if=\"todo.isEditing\"\n                    class=\"btn btn-default\"\n                    ng-click=\"onCancelClick(todo)\">\n                    Cancel\n                </button>\n                <a href=\"#assignModel\" role=\"button\" class=\"btn btn-warning\" data-toggle=\"modal\" ng-click=\"selectTodo(todo)\" ng-if=\"(User.role | uppercase) == 'ADMIN'\">Assign</a>\n            </td>\n        </tr>\n    </table>\n    <div id=\"assignModel\" class=\"modal fade\" tabindex=\"-1\" role=\"dialog\">\n        <div class=\"modal-content\">\n            <div class=\"modal-header\">\n                <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-hidden=\"true\">×</button>\n                <h3>Select User</h3>\n            </div>\n            <div class=\"modal-body\">\n\n                <select class=\"selectpicker\" data-container=\"body\" ng-model=\"selectedUser\">\n                    <option ng-repeat=\"user in users\" value=\"{{user.userName}}\">{{user.userName | uppercase}}</option>\n                </select>\n\n            </div>\n            <div class=\"modal-footer\">\n                <button class=\"btn btn-primary\" data-dismiss=\"modal\" aria-hidden=\"true\" ng-click=\"onAssignClick()\">Save changes</button>\n            </div>\n        </div>\n    </div>\n</div>\n"
 
 /***/ },
 /* 42 */
@@ -64539,7 +64551,7 @@
 
 
 	// module
-	exports.push([module.id, ".todos__create-input {\n  margin: 0 auto 5px;\n  width: 300px;\n}\n\n.todos__create-button {\n  display: block;\n  margin: 0 auto 20px;\n}\n\n.todos__task--completed {\n  text-decoration: line-through;\n}\n\n.todos__update-input {\n  margin: 0 auto;\n  width: 300px;\n}\n\nth, td {\n  font-size: 20px;\n  text-align: center;\n}\n\n.nav-link {\n  float: right;\n  margin-top: 20px;\n  padding: 0 10px;\n}\n", ""]);
+	exports.push([module.id, ".todos__create-input {\n  margin: 0 auto 5px;\n  width: 300px;\n}\n\n.todos__create-button {\n  display: block;\n  margin: 0 auto 20px;\n}\n\n.todos__task--completed {\n  text-decoration: line-through;\n}\n\n.todos__update-input {\n  margin: 0 auto;\n  width: 300px;\n}\n\nth, td {\n  font-size: 20px;\n  text-align: center;\n}\n\nhtml {\n  min-height: 100%;\n}\n\nhtml, body {\n  margin: 0;\n  padding: 0;\n}\n\nhtml, body {\n  height: 100%;\n}\n\n.nav-link {\n  float: right;\n  margin-top: 20px;\n  padding: 0 10px;\n}\n\nbody {\n  background-image: linear-gradient(#b0f4ec, #2a8276);\n  margin: 0 auto;\n  margin: 0px;\n  padding: 0px;\n  min-height: 100%;\n  height: auto !important;\n  height: 100%;\n  margin: 0 auto -20px;\n}\n\n.loginForm {\n  position: center;\n  margin-top: 50px;\n}\n\n.img-rounded {\n  position: center;\n}\n\n.center-block {\n  display: block;\n  margin-top: 50px;\n  margin-left: auto;\n  margin-right: auto;\n}\n\n.navbar-brand {\n  color: black;\n  font-size: 2em;\n  font-family: \"Kaushan Script\", \"Helvetica Neue\", Helvetica, Arial, cursive;\n}\n\n.text-muted {\n  color: #5b5555;\n  position: absolute;\n  bottom: 0;\n  width: 100%;\n  /* Set the fixed height of the footer here */\n  height: 60px;\n  text-align: center;\n}\n", ""]);
 
 	// exports
 
