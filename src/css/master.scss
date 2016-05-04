@@ -18,6 +18,8 @@ html, body {
     
 }
 
+
+
 body {
 
   background-image:
@@ -60,16 +62,20 @@ body {
 }
 
 .text-muted {
-  color:#5b5555;
+  color:black;
   position: absolute;
   bottom: 0;
   width: 100%;
   /* Set the fixed height of the footer here */
-  height: 60px;
+  height: 30px;
   text-align: center;
 
 }
 
+.text-muted .linkto {
+  color: white;
+
+}
 
 
 
