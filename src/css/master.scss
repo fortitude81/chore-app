@@ -1,5 +1,16 @@
 @import 'todos.scss';
 
+html {min-height: 100%;}
+
+html, body {
+    margin:0;
+    padding:0;
+}
+
+html, body {
+    height: 100%;
+}
+
 .nav-link {
     float: right;
     margin-top: 20px;
@@ -7,8 +18,56 @@
     
 }
 
-* {
-	background-color: #e8dcdc;
+body {
+
+  background-image:
+    linear-gradient(
+      #b0f4ec, #2a8276
+    );
+     margin: 0 auto;
+     margin: 0px;
+    padding: 0px;
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin: 0 auto -20px;
+}
+
+
+
+.loginForm {
+	position: center;
+	margin-top: 50px;
+}
+
+.img-rounded {
+	position: center;
+}
+
+.center-block {
+    display: block;
+    margin-top: 50px;
+    margin-left: auto;
+    margin-right: auto;
+ }
+
+
+
+.navbar-brand {
+  color:black;
+  font-size: 2em;
+  font-family: "Kaushan Script", "Helvetica Neue", Helvetica, Arial, cursive;
+}
+
+.text-muted {
+  color:#5b5555;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 60px;
+  text-align: center;
+
 }
 
 
